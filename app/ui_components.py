@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 
 def render_chat_message(message, is_user=True):
     """
@@ -40,165 +41,121 @@ def render_chat_history(chat_history):
 
 def load_custom_css():
     """Load custom CSS for the chat interface."""
-    st.markdown("""
-    <style>
-    /* Base Styles */
-    .main {
-        padding: 2rem;
-        color: #e0e0e0;
-    }
-    .stApp {
-        background-color: #0a1929;
-    }
+    # Try to load external CSS file
+    css_path = os.path.join("assets", "css", "custom.css")
     
-    /* Chat Container */
-    .chat-container {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        margin-bottom: 20px;
-    }
+    if os.path.exists(css_path):
+        with open(css_path, "r") as f:
+            css_content = f.read()
+        st.markdown(f"<style>{css_content}</style>", unsafe_allow_html=True)
+    else:
+        # Fallback to simple inline CSS if file doesn't exist
+        st.markdown("""
+        <style>
+        /* Base Styles */
+        .stApp {
+            background-color: #0a1929;
+            color: #e0e0e0;
+        }
+        
+        /* Chat Container */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        /* Message Styling */
+        .chat-message {
+            display: flex;
+            align-items: flex-start;
+            padding: 8px;
+            border-radius: 6px;
+            max-width: 85%;
+        }
+        
+        .user-message {
+            margin-left: auto;
+            background-color: #1e4976;
+            border-left: 2px solid #4d94ff;
+        }
+        
+        .assistant-message {
+            margin-right: auto;
+            background-color: #112940;
+            border-right: 2px solid #4d94ff;
+        }
+        
+        .avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            margin-right: 8px;
+        }
+        
+        .user-avatar {
+            background-color: #2a5a9a;
+        }
+        
+        .assistant-avatar {
+            background-color: #1c3b5a;
+        }
+        
+        .message-content {
+            flex: 1;
+            padding: 3px;
+            color: #e0e0e0;
+        }
+        
+        /* Input Area */
+        .chat-input-area {
+            display: flex;
+            background-color: #112940;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 1px solid #1e4976;
+        }
+        
+        /* Other UI Elements */
+        .title-container {
+            margin-bottom: 15px;
+        }
+        
+        .footer-text {
+            font-size: 12px;
+            color: #b0b0b0;
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        .developer-info {
+            background-color: #15375e;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            text-align: center;
+            border-left: 4px solid #4d94ff;
+            color: #ffffff;
+        }
+        
+        /* Override Streamlit elements */
+        .stButton>button {
+            background-color: #4d94ff;
+            color: #ffffff;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            color: #ffffff !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
     
-    /* Message Styling */
-    .chat-message {
-        display: flex;
-        align-items: flex-start;
-        padding: 10px;
-        border-radius: 8px;
-        max-width: 80%;
-        animation: fadeIn 0.3s ease-in-out;
-    }
-    
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .user-message {
-        margin-left: auto;
-        background-color: #1e4976;
-        border-top-right-radius: 2px;
-        border-left: 2px solid #4d94ff;
-    }
-    
-    .assistant-message {
-        margin-right: auto;
-        background-color: #112940;
-        border-top-left-radius: 2px;
-        border-right: 2px solid #4d94ff;
-    }
-    
-    .avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-        margin-right: 10px;
-    }
-    
-    .user-avatar {
-        background-color: #2a5a9a;
-    }
-    
-    .assistant-avatar {
-        background-color: #1c3b5a;
-    }
-    
-    .message-content {
-        flex: 1;
-        padding: 5px;
-        color: #e0e0e0;
-    }
-    
-    /* Input Area */
-    .chat-input-area {
-        display: flex;
-        background-color: #112940;
-        padding: 10px;
-        border-radius: 10px;
-        margin-top: 20px;
-        border: 1px solid #1e4976;
-    }
-    
-    /* Other UI Elements */
-    .diagnosis-box {
-        background-color: #112940;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        margin-top: 20px;
-        color: #e0e0e0;
-        border-left: 4px solid #4d94ff;
-    }
-    
-    .title-container {
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
-        color: #ffffff;
-    }
-    
-    .footer-text {
-        font-size: 14px;
-        color: #b0b0b0;
-        text-align: center;
-        margin-top: 30px;
-    }
-    
-    .sidebar-content {
-        padding: 20px;
-        color: #e0e0e0;
-    }
-    
-    .developer-info {
-        background-color: #15375e;
-        padding: 15px;
-        border-radius: 5px;
-        margin-top: 20px;
-        text-align: center;
-        border-left: 4px solid #4d94ff;
-        color: #ffffff;
-    }
-    
-    /* Override Streamlit elements */
-    .stTextInput, .stTextArea, .stSelectbox {
-        background-color: #112940;
-        color: #ffffff;
-    }
-    
-    .stButton>button {
-        background-color: #4d94ff;
-        color: #ffffff;
-    }
-    
-    .stExpander {
-        background-color: #112940;
-        color: #e0e0e0;
-    }
-    
-    .stMarkdown {
-        color: #e0e0e0;
-    }
-    
-    h1, h2, h3, h4, h5, h6 {
-        color: #ffffff !important;
-    }
-    
-    /* Chat input styling */
-    #chat-input-text {
-        flex-grow: 1;
-        margin-right: 10px;
-    }
-    
-    #send-button {
-        min-width: 100px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
 def render_initial_message():
     """Render the welcome message from the AI assistant."""
     st.markdown(f"""

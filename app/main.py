@@ -3,7 +3,10 @@ import sys
 import os
 
 # Add the parent directory to the path so we can import from app
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if parent_dir not in sys.path:
+    sys.path.insert(0, parent_dir)
+
 from app.rag_pipeline import get_medical_response
 from app.chat_history import ChatHistory
 from app.ui_components import load_custom_css, render_chat_history, render_initial_message

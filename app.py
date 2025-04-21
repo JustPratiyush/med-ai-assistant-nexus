@@ -1,10 +1,11 @@
 import sys
 import os
 
-# Add parent directory to path
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# Add project root directory to Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(current_dir)
 
-# Run the main file directly
+# Run the main file using streamlit
 if __name__ == "__main__":
     import subprocess
     subprocess.run(["streamlit", "run", "app/main.py"])
